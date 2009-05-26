@@ -4,7 +4,11 @@
 
 == DESCRIPTION:
 
-FIX (describe your package)
+DESCRIPTION
+  This is a Ruby extension for file-system information,
+  using the 'statvfs' and 'getmntent' system calls.
+  Tested on Linux and Solaris
+  Version 0.5
 
 == FEATURES/PROBLEMS:
 
@@ -12,15 +16,72 @@ FIX (describe your package)
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  module FileSystem
+
+  FileSystem.stat( path )
+
+  Struct FileSystemStat
+  s.path		directory path provided
+  s.block_size	optimal transfer block size
+  s.blocks	total number of data blocks in file system
+  s.blocks_free	number of free blocks in file system
+  s.blocks_avail	number of free blocks available to non-super-user
+  s.files		total number of file nodes in file system
+  s.files_free	number of free file nodes in file system
+  s.files_avail	number of free file nodes available to non-super-user
+  s.flags		file system flags
+  s.maxnamelen	maximum file name length
+
+
+  FileSystem.mounts( optional file name )
+  FileSystem.mounts( optional file name ) { |mt| optional block }
+
+  The default mount-table filename is "/etc/mtab" on Linux,
+  and "/etc/mnttab" on Solaris.  On Linux, this can be used
+  to scan "/etc/fstab" also.
+
+  Struct FileSystemMount
+  m.device	file system (i.e. partition device) name
+  m.mount		mount point directory
+  m.fstype	file system type
+  m.options	mount options
+  m.time		time the filesystem was mounted (Solaris)
+  m.dump_interval dump frequency in days (Linux/BSD)
+  m.check_pass	pass number of file system check (Linux/BSD)
+
+  Constants for FileSystem.stat 'flags'
+
+  Solaris:	RDONLY NOSUID NOTRUNC
+  Linux:		RDONLY NOSUID 
+  GNU:		RDONLY NOSUID NODEV NOEXE SYNC MANDLOCK
+  WRITE APPEND IMMUTABLE NOATIME NODIRATIME
+
 
 == REQUIREMENTS:
 
 * FIX (list of requirements)
 
 == INSTALL:
+  ruby extconf.rb
+  make
+  ruby Test.rb	(optional directories)
+  make install
 
-* FIX (sudo gem install, anything else)
+== TODO
+    Move this "documentation" into the source.
+    Convert st.flags from a number to an array of strings.
+    Solicit patches for other UNIXen.
+
+==  ACKNOWLEDGEMENTS
+  Daniel Berger for testing on Solaris, and motivation.
+  comp.lang.ruby for suggesting better names.
+  Dmitry Borodaenko for finding a bug (by testing on IA64 Debian)
+
+== AUTHOR
+  Mike Hall
+  mghall@enteract.com
+  www.enteract.com/~mghall
+  2003-09-04
 
 == LICENSE:
 
